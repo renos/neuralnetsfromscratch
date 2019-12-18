@@ -30,11 +30,12 @@ def print_mnist_image(input_array):
   plt.imshow(input_array.reshape((28,28)), cmap="gray")
   plt.show()
 
-def Xavier_Initialization(ind,outd):
+def Xavier_Initialization(shape, divisor):
+  # shape is a tuple of dimensions
   #Used for Sigmoid / TanH
-  return np.random.randn(ind, oud)* sqrt(1/ind)
+  return np.random.randn(*shape) * sqrt(1/divisor)
 
-def He_Initialization(ind,outd):
+def He_Initialization(shape, divisor):
   #https://arxiv.org/pdf/1502.01852v1.pdf
   #Used to initalize ReLU networks.
-  return np.random.randn(ind, outd)* sqrt(2/ind)
+  return np.random.randn(*shape) * sqrt(2/divisor)
