@@ -38,3 +38,22 @@ def He_Initialization(ind,outd):
   #https://arxiv.org/pdf/1502.01852v1.pdf
   #Used to initalize ReLU networks.
   return np.random.randn(ind, outd)* sqrt(2/ind)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
