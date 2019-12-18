@@ -120,5 +120,42 @@ class Convolutional():
     self.cache = (x, weight, bias)
     return out
 
-   def backward(self, dout):
+  def backward(self, dout):
+    # input: dout of shape (N, F, H', W')
+    # returns: dx of shape (N, C, H, W)
+    #          dw of shape (F, C, WW, HH)
+    #          db of shape (F,)
+    x, weight, bias = self.cache
+    batch_size, in_ch, height, width = x.shape
+    out_ch, _, filter_height, filter_width = self.weight.shape
+    padding = self.padding
+    stride = self.stride
+    weight = self.weight
+    bias = self.bias
+    _, _, H_prime, W_prime = dout.shape
+    
+    padded = np.pad(x, ((0,0), (0,0), (padding,padding), (padding,padding)),
+        'constant', constant_values=0)
+    padded_dx = np.zeros(padded.shape)
+    dx = np.zeros(x.shape)
+    dw = np.zeros(weight.shape)
+    db = np.zeros(bias.shape)
+
+    for sample_index in range(batch_size):
+      for filter_index in range(out_ch):
+        db[filter_index] += np.sum(dout[sample_index, filter_index])
+        for h_pos in range(H_prime):
+          for w_pos in range(W_prime):
+            h_start, h_end = (h_pos * stride, h_pos * stride + filter_height)
+            w_start, w_end = (w_pos * side, w_pos * stride + filter_width)
+            conv_slice = padded[sample_index, :, \
+                h_start : h_end, w_start : w_end]
+            dw[filter_index] += conv_slice \
+                * dout[sample_index, filter_index, h_pos, w_pos]
+            padded_dx[sample_index, :, h_start : h_end, w_start : w_end] \
+                += weight[filter_index] \
+                * dout[sample_index, filter_index, h_pos, w_pos]
+
+    dx = padded_dx[:, :, pad : pad + height, pad : pad + width]
+    return dx, dw, db
 
