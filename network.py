@@ -1,6 +1,6 @@
 from layers import *
 import numpy as np
-
+from utils import *
 
 
 class NerualNetwork():
@@ -20,7 +20,8 @@ class NerualNetwork():
 
 	def gradient_descent(self,x_train,x_test):
 
-		for 
+		for layer in self.layers:
+
 
 
 

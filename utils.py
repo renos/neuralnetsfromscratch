@@ -40,7 +40,7 @@ def He_Initialization(ind,outd):
   return np.random.randn(ind, outd)* sqrt(2/ind)
 
 
-
+def NLLLoss():
 
 
 
