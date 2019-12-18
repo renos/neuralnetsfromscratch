@@ -1,5 +1,6 @@
 from utils import *
 from layers import *
+import numpy as np
 
 try:
   with open("mnist.pkl",'rb') as f:

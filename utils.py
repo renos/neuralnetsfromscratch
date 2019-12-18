@@ -39,3 +39,4 @@ def He_Initialization(shape, divisor):
   #https://arxiv.org/pdf/1502.01852v1.pdf
   #Used to initalize ReLU networks.
   return np.random.randn(*shape) * sqrt(2/divisor)
+

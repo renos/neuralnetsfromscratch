@@ -57,6 +57,11 @@ class Linear():
     self.bias = bias
 
 
+class MaxPooling():
+	def __init__(self, C,HH,WW):
+
+
+
 class Convolutional():
 
   def __init__(self, F, C, HH, WW, bias=False, padding=0, stride=1, activation='ReLU'):
