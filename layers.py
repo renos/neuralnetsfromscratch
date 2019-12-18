@@ -55,7 +55,7 @@ class Linear():
 
 class Convolutional():
 
-  def __init__(self, F, C, HH, WW, bias = False, activation = 'ReLU')
+  def __init__(self, F, C, HH, WW, bias = False, activation = 'ReLU'):
     self.in_channels = C
     self.out_channels = F
     self.filter_height = HH
