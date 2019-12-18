@@ -15,6 +15,25 @@ class ReLU():
     return dout * np.piecewise(x, [x <= 0, x > 0], [0, 1])
 
 
+class SoftmaxLoss():
+  def __init__(self):
+    cache = None
+
+  def forward(self, x):
+    shifted_logits = x - np.max(x, axis=1, keepdims=True)
+    Z = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
+    log_probs = shifted_logits - np.log(Z)
+    probs = np.exp(log_probs)
+    N = x.shape[0]
+    loss = -np.sum(log_probs[np.arange(N), y]) / N
+
+
+  def backward(self, dout):
+    dx = probs.copy()
+    dx[np.arange(N), y] -= 1
+    dx /= N
+
+
 class Linear():
   def __init__(self, in_dimension, out_dimension, bias=False, activation='ReLU'):
     self.in_dimension = in_dimension
