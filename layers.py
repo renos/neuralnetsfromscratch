@@ -20,12 +20,12 @@ class SoftmaxLoss():
     cache = None
 
   def forward(self, x):
-    shifted_logits = x - np.max(x, axis=1, keepdims=True)
-    Z = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
-    log_probs = shifted_logits - np.log(Z)
-    probs = np.exp(log_probs)
+    x_shift = x - np.max(x, axis=1, keepdims=True)
+    Z = np.sum(np.exp(x_shift), axis=1, keepdims=True)
+    nll = x_shift - np.log(Z)
+    probs = np.exp(nll)
     N = x.shape[0]
-    loss = -np.sum(log_probs[np.arange(N), y]) / N
+    loss = -np.sum(nll[np.arange(N), y]) / N
 
 
   def backward(self, dout):
