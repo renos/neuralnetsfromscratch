@@ -16,7 +16,7 @@ class NeuralNetwork():
       start = 0
       while start < num_samples:
         end = min(num_samples, start + batch_size)
-        #print("Batch samples %d-%d" % (start, end))
+        print("Batch samples %d-%d" % (start, end))
         x = x_train[start:end]
         y = y_train[start:end]
         out = x
@@ -35,7 +35,6 @@ class NeuralNetwork():
     out = x_test
     for layer in self.layers[:-1]:
       out = layer.forward(out)
-      print(out.shape)
     return np.argmax(out, axis=1)
 
 class GradientDescent():
@@ -76,7 +75,7 @@ class Momentum():
 
 class AdaGrad():
 
-  def __init__(self, learn_rate=0.1):
+  def __init__(self, learn_rate=0.001):
     self.learn_rate = learn_rate
     self.cache = {}
     self.t = 0
