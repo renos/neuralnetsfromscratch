@@ -27,47 +27,55 @@ if __name__ == "__main__":
   x_test = x_test.reshape((10000, 1, 28, 28))
 
   nnetwork = NeuralNetwork(
-      Convolution(F=6, C=1, HH=5, WW=5, padding=2), ReLU(),
-      MaxPool(HH=2, WW=2, stride=2),
-      Convolution(F=16, C=6, HH=5, WW=5), ReLU(),
-      MaxPool(HH=2, WW=2, stride=2),
-      Convolution(F=120, C=16, HH=5, WW=5), ReLU(),
       Flatten(),
-      Linear(in_dimension=120, out_dimension=84), ReLU(),
+      Linear(in_dimension=784, out_dimension=196), ReLU(),
+      Linear(in_dimension=196, out_dimension=84), ReLU(),
       Linear(in_dimension=84, out_dimension=10),
       SoftmaxLoss()
   )
 
-  train_count = 10000
-  test_count = 1000
+  train_count = 60000
+  test_count = 10000
+
+  learn_rate = float(sys.argv[2])
+  batch_size = int(sys.argv[3])
+  lam = float(sys.argv[4])
 
   if sys.argv[1] == "adam":
     name = "adam"
-    optim = Adam()
+    optim = Adam(learn_rate=learn_rate, lam=lam)
   elif sys.argv[1] == "momentum":
     name = "momentum"
-    optim = Momentum(learn_rate=0.00001, gamma=0.9)
+    gamma = float(sys.argv[5])
+    print("gamma", gamma)
+    optim = Momentum(learn_rate=learn_rate, lam=lam, gamma=gamma)
   elif sys.argv[1] == "adagrad":
     name = "adagrad"
-    optim = AdaGrad()
+    optim = AdaGrad(learn_rate=learn_rate, lam=lam)
   elif sys.argv[1] == "sgd":
     name = "sgd"
-    optim = GradientDescent(learn_rate=0.00001)
+    optim = GradientDescent(learn_rate=learn_rate, lam=lam)
   else:
     print("invalid optimizer")
-  print(name, "optimizer")
+  print(name, "learn_rate", learn_rate, "batch_size", batch_size,
+      "lam", lam)
 
   results = []
+  losses = []
 
-  for i in range(10):
+  for i in range(100):
     print("Epoch", i)
-    nnetwork.train(x_train[:train_count], y_train[:train_count],
-        optim, 1, batch_size=128)
+    batch_losses = nnetwork.train(x_train[:train_count], y_train[:train_count],
+        optim, 1, batch_size=batch_size)
+    losses.append(np.mean(batch_losses))
     y_predict = nnetwork.predict(x_test[:test_count])
     acc = np.mean(y_predict == y_test[:test_count])
     print("Test set accuracy:", acc)
     results.append(acc)
+    print("Loss:", losses[-1])
 
-  print(name, "by epoch:")
+  print(name, "Test set accuracy:")
   print(results)
+  print("Losses:")
+  print(losses)
 

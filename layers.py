@@ -76,9 +76,9 @@ class Linear():
       dbias = self.bias #zeros
     return (dx, dweight, dbias)
 
-  def update_weights(self, dweight, dbias):
-    self.weight += dweight
-    self.bias += dbias
+  def update_weights(self, lam, dweight, dbias):
+    self.weight += dweight - lam * self.weight
+    self.bias += dbias - lam * self.bias
 
 
 class MaxPool():
@@ -243,9 +243,9 @@ class Convolution():
     dx = padded_dx[:, :, padding : padding + height, padding : padding + width]
     return (dx, dw, db)
 
-  def update_weights(self, dweight, dbias):
-    self.weight += dweight
-    self.bias += dbias
+  def update_weights(self, lam, dweight, dbias):
+    self.weight += dweight - lam * self.weight
+    self.bias += dbias - lam * self.bias
 
 
 class Flatten():
